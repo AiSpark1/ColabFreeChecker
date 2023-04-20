@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 import time
 import cv2
-from flask import Flask
+from flask import Flask, request
+
 import pyautogui
 
 
@@ -52,6 +53,14 @@ def click_leave():
 
 @app.route('/click_robo')
 def click_robo():
+    bbox=request.json
+    if bbox is not None:
+        cx=bbox["left"]+bbox["width"]/2
+        cy=bbox["top"]+bbox["height"]/2
+        pyautogui.click(cx, cy)
+        message=f"clicked {cx}, {cy}"
+        print(message)
+        return message
     return click(white_robo, grayscale=True, confidence=0.7, cx=0.5)
 
 
